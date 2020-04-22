@@ -12,11 +12,17 @@ class Sudoku
 
   def solve_lines
     self.solution = solution.map(&method(:complete_line))
+    self.solution = reverse_grid(reverse_grid(solution).map(&method(:complete_line)))
+  end
+
+  def reverse_grid grid
+    NUMBERS.map.with_index { |_, index| grid.map { |line| line.split('')[index] } }.map { |chars| chars.join }
   end
 
   CHAR_TO_COMPLETE = "x".freeze
   CHAR_TO_IGNORE = ".".freeze
-  CHARS_AUTHORIZED = (1..9).to_a.map(&:to_s).freeze
+  NUMBERS = (1..9).to_a.freeze
+  CHARS_AUTHORIZED = NUMBERS.map(&:to_s).freeze
 
   def complete_line line
     chars = line.split ''
