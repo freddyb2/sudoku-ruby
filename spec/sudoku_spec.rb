@@ -72,7 +72,7 @@ describe Sudoku do
       ]],
     ].each do |grid, expected_solution|
       it 'solves case' do
-        expect(described_class.solve(grid)).to eq expected_solution
+        expect(described_class.solve(grid.freeze)).to eq expected_solution
       end
     end
   end
