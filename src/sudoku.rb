@@ -44,7 +44,7 @@ class Sudoku
   def complete_line line
     chars = line.split ''
     return line if chars.include?(CHAR_TO_IGNORE)
-    return line unless chars.include?(CHAR_TO_COMPLETE)
+    return line unless chars.select { |char| char == CHAR_TO_COMPLETE }.count == 1
     chars.join.gsub(CHAR_TO_COMPLETE, (CHARS_AUTHORIZED - chars.select { |char| char != CHAR_TO_COMPLETE }).first)
   end
 

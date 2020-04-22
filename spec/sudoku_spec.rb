@@ -149,4 +149,25 @@ describe Sudoku do
       end
     end
   end
+  context 'easy case' do
+    [[%w[
+        75893xxx1
+        xx1xx5xx4
+        xx621x3xx
+        x2x6895xx
+        x1xx5x6xx
+        x9xx218xx
+        16xxx8x92
+        xxxx7xx3x
+        4xxx96x5x
+      ],
+      nil #to be defined
+     ],
+    ].each do |grid, expected_solution|
+      it 'solves case' do
+        expect(described_class.solve(grid)).not_to eq grid
+        expect(described_class.solve(grid)).to eq expected_solution
+      end
+    end
+  end
 end
