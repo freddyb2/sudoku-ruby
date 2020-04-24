@@ -76,6 +76,7 @@ describe Sudoku do
       end
     end
   end
+
   context 'more cases' do
     [[%w[
         .........
@@ -175,6 +176,7 @@ describe Sudoku do
         472396158
       ])
   end
+
   it 'solves middle case' do
     expect(
       described_class.solve(%w[
@@ -198,6 +200,24 @@ describe Sudoku do
         623157849
         917648532
         854293167
+      ])
+    end
+
+  it 'solves difficult case' do
+    expect(
+      described_class.solve(%w[
+        x19xxx2xx
+        xxx65xxxx
+        xxxxx7135
+        x3x47xxxx
+        x41xxxxxx
+        xxxxxx9x7
+        1xxxx8xxx
+        4x2xx3xxx
+        xxxxxx589
+      ])
+    ).to eq(%w[
+        to_do
       ])
   end
 end
