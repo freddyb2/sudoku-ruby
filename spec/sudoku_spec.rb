@@ -149,8 +149,10 @@ describe Sudoku do
       end
     end
   end
-  context 'easy case' do
-    [[%w[
+
+  it 'solves easy case' do
+    expect(
+      described_class.solve(%w[
         75893xxx1
         xx1xx5xx4
         xx621x3xx
@@ -160,8 +162,8 @@ describe Sudoku do
         16xxx8x92
         xxxx7xx3x
         4xxx96x5x
-      ],
-      %w[
+      ])
+    ).to eq(%w[
         758934261
         231865974
         946217385
@@ -171,17 +173,11 @@ describe Sudoku do
         163548792
         589172436
         472396158
-      ]
-     ],
-    ].each do |grid, expected_solution|
-      it 'solves case' do
-        expect(described_class.solve(grid)).not_to eq grid
-        expect(described_class.solve(grid)).to eq expected_solution
-      end
-    end
+      ])
   end
-  context 'middle case' do
-    [[%w[
+  it 'solves middle case' do
+    expect(
+      described_class.solve(%w[
         x79xx1xx3
         xx8x7xxx1
         xx2x34xx5
@@ -191,8 +187,8 @@ describe Sudoku do
         x2x1x7xxx
         x1x64853x
         85x2xxx6x
-      ],
-      %w[
+      ])
+    ).to eq(%w[
         579861423
         348572691
         162934785
@@ -202,13 +198,6 @@ describe Sudoku do
         623157849
         917648532
         854293167
-      ]
-     ],
-    ].each do |grid, expected_solution|
-      it 'solves case' do
-        expect(described_class.solve(grid)).not_to eq grid
-        expect(described_class.solve(grid)).to eq expected_solution
-      end
-    end
+      ])
   end
 end
