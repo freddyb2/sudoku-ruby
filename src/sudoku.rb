@@ -16,7 +16,7 @@ class Sudoku
   private
 
   def check_chars! chars
-    chars_except_ignored = (chars - [CHAR_TO_IGNORE, CHAR_TO_COMPLETE])
+    chars_except_ignored = (chars - [CHAR_TO_COMPLETE])
     raise "ERROR" if chars_except_ignored.count != chars_except_ignored.uniq.count
   end
 
@@ -71,14 +71,12 @@ class Sudoku
   end
 
   CHAR_TO_COMPLETE = "x".freeze
-  CHAR_TO_IGNORE = ".".freeze
   GRID_POWER = 3
   SIDE_INDEXES = (0..(GRID_POWER ** 2 - 1)).to_a.freeze
   CHARS_AUTHORIZED = (1..(GRID_POWER ** 2)).map(&:to_s).freeze
 
   def complete_line line
     chars = line.split ''
-    return line if chars.include?(CHAR_TO_IGNORE)
     return line unless chars.select { |char| char == CHAR_TO_COMPLETE }.count == 1
     chars.join.gsub(CHAR_TO_COMPLETE, (CHARS_AUTHORIZED - chars.select { |char| char != CHAR_TO_COMPLETE }).first)
   end
