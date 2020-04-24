@@ -161,7 +161,17 @@ describe Sudoku do
         xxxx7xx3x
         4xxx96x5x
       ],
-      nil #to be defined
+      %w[
+        758934261
+        231865974
+        946217385
+        324689517
+        817453629
+        695721843
+        163548792
+        589172436
+        472396158
+      ]
      ],
     ].each do |grid, expected_solution|
       it 'solves case' do
