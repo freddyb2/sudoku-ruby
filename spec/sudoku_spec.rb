@@ -180,4 +180,35 @@ describe Sudoku do
       end
     end
   end
+  context 'middle case' do
+    [[%w[
+        x79xx1xx3
+        xx8x7xxx1
+        xx2x34xx5
+        xxxxx697x
+        x9xxx53xx
+        4x1xxxxxx
+        x2x1x7xxx
+        x1x64853x
+        85x2xxx6x
+      ],
+      %w[
+        579861423
+        348572691
+        162934785
+        285316974
+        796425318
+        431789256
+        623157849
+        917648532
+        854293167
+      ]
+     ],
+    ].each do |grid, expected_solution|
+      it 'solves case' do
+        expect(described_class.solve(grid)).not_to eq grid
+        expect(described_class.solve(grid)).to eq expected_solution
+      end
+    end
+  end
 end
