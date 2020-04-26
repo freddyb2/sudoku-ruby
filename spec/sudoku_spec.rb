@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 require 'sudoku'
 
 describe Sudoku do
-  it 'solves easy case' do
+  it 'solves easy grids' do
     expect(
       described_class.solve(%w[
         75893xxx1
@@ -28,7 +28,7 @@ describe Sudoku do
       ])
   end
 
-  it 'solves middle case' do
+  it 'solves more difficult grids' do
     expect(
       described_class.solve(%w[
         x79xx1xx3
@@ -54,7 +54,7 @@ describe Sudoku do
       ])
     end
 
-  it 'solves difficult case' do
+  it 'solves difficult grid' do
     expect(
       described_class.solve(%w[
         x19xxx2xx
@@ -77,6 +77,24 @@ describe Sudoku do
         195768324
         482593761
         673142589
+      ])
+  end
+
+  it 'solves expert grid' do
+    expect(
+      described_class.solve(%w[
+        xxxx83x9x
+        6x7xxx3xx
+        x1xxxxxxx
+        x7x1xxx85
+        xxx59xxxx
+        xx87xxxxx
+        x4xx71xxx
+        xx6xxxx5x
+        8xxxxxxx3
+      ])
+    ).to eq(%w[
+        to_do
       ])
   end
 end
