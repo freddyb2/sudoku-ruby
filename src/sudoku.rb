@@ -4,12 +4,11 @@ class Sudoku
   end
 
   def solve
-    loop do
+    begin
       solution_before = solution.dup
       solve_lines
-      break if solution == solution_before
-    end
-    check_solution!
+      no_progress = solution == solution_before
+    end until solution_reached? || no_progress
     solution
   end
 
@@ -19,15 +18,18 @@ class Sudoku
     raise "NOT COMPLETE" unless (CHARS_AUTHORIZED - chars).empty? && chars.count == CHARS_AUTHORIZED.count
   end
 
-  def check_solution!
+  def solution_reached?
     CELLS_INDEXES.each { |index| check_chars! chars_in_line(index) }
     CELLS_INDEXES.each { |index| check_chars! chars_in_column(index) }
     SQUARES_INDEXES.each { |x| SQUARES_INDEXES.each { |y| check_chars! chars_in_square(x * GRID_POWER, y * GRID_POWER) } }
+    true
+  rescue
+    false
   end
 
   def possibilities(line_index, column_index)
     cell = cell(line_index, column_index)
-    return nil if cell != CHAR_TO_COMPLETE
+    return [] if cell != CHAR_TO_COMPLETE
     CHARS_AUTHORIZED - chars_in_line(line_index) - chars_in_column(column_index) - chars_in_square(line_index, column_index)
   end
 
@@ -41,11 +43,16 @@ class Sudoku
     (line_min..line_max).map { |line_index| (column_min..column_max).map { |column_index| (cell_column_index == line_index && cell_column_index == column_index) ? nil : possibilities(line_index, column_index) } }.compact.flatten
   end
 
+  MAX_POSS = 6
 
   def solve_lines
+    max_poss = 0
     CELLS_INDEXES.each do |line_index|
       CELLS_INDEXES.each do |column_index|
         possibilities = possibilities(line_index, column_index)
+        print("[" + possibilities.map(&:to_s).join + (1..(MAX_POSS - possibilities.count)).to_a.map { |_| " " }.join + "]")
+        print ("   ") if ((column_index + 1) % 3 == 0)
+        max_poss = [possibilities.count, max_poss].max if possibilities
         next unless possibilities
         possibilities_line = possibilities - CELLS_INDEXES.select { |y| y != column_index }.map { |y| possibilities(line_index, y) }.flatten
         possibilities_column = possibilities - CELLS_INDEXES.select { |x| x != line_index }.map { |x| possibilities(x, column_index) }.flatten
@@ -57,7 +64,10 @@ class Sudoku
 
         write_cell(line_index, column_index, cell_solutions.first) if cell_solutions.count == 1
       end
+      puts
+      puts if ((line_index + 1) % 3 == 0)
     end
+    puts "* " * 10, "max_poss=#{max_poss}"
   end
 
   def write_cell(line_index, column_index, value)
