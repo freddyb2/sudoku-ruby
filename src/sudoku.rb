@@ -125,23 +125,20 @@ class Sudoku
   end
 
   def solve_lines(grid)
-    max_poss = 0
     grid.cell_indexes.each do |line_index|
       grid.cell_indexes.each do |column_index|
         possibilities = grid.possibilities(line_index, column_index)
-        max_poss = [possibilities.count, max_poss].max if possibilities
         next unless possibilities
         possibilities_line = possibilities - grid.possibilities_in_line(line_index, column_index)
         possibilities_column = possibilities - grid.possibilities_in_column(line_index, column_index)
         possibilities_square = possibilities - grid.possibilities_in_square(line_index, column_index)
         cell_solutions = [possibilities, possibilities_line, possibilities_column, possibilities_square]
-                           .select { |p| p.count == 1 }
-                           .flatten
-                           .uniq
+                             .select { |p| p.count == 1 }
+                             .flatten
+                             .uniq
 
         grid.write_cell(line_index, column_index, cell_solutions.first) if cell_solutions.count == 1
       end
     end
-    max_poss
   end
 end
