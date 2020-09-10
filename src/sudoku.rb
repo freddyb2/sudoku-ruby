@@ -124,9 +124,6 @@ class Sudoku
     raise "NOT COMPLETE" unless (CHARS_AUTHORIZED - chars).empty? && chars.count == CHARS_AUTHORIZED.count
   end
 
-
-  MAX_POSS = 6
-
   def solve_lines(grid)
     max_poss = 0
     grid.cell_indexes.each do |line_index|
