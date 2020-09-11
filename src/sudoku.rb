@@ -85,11 +85,11 @@ class Grid
       CELLS_INDEXES.each do |column_index|
         cell = cell(line_index, column_index)
         content = cell == CHAR_TO_COMPLETE ? possibilities(line_index, column_index) : [cell]
-        print("[" + content.map(&:to_s).join + (1..(9 - content.count)).to_a.map { |_| " " }.join + "]")
-        print "   " if ((column_index + 1) % 3 == 0)
+        print("[" + content.map(&:to_s).join + (1..(CELLS_INDEXES.count - content.count)).to_a.map { |_| " " }.join + "]")
+        print "   " if ((column_index + 1) % GRID_POWER == 0)
       end
       puts
-      puts if ((line_index + 1) % 3 == 0)
+      puts if ((line_index + 1) % GRID_POWER == 0)
     end
   end
 
