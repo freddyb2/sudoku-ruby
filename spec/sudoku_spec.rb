@@ -14,7 +14,7 @@ describe Sudoku do
         16xxx8x92
         xxxx7xx3x
         4xxx96x5x
-      ])
+      ]).grid
     ).to eq(%w[
         758934261
         231865974
@@ -40,7 +40,7 @@ describe Sudoku do
         x2x1x7xxx
         x1x64853x
         85x2xxx6x
-      ])
+      ]).grid
     ).to eq(%w[
         579861423
         348572691
@@ -66,7 +66,7 @@ describe Sudoku do
         1xxxx8xxx
         4x2xx3xxx
         xxxxxx589
-      ])
+      ]).grid
     ).to eq(%w[
         519834276
         327651498
@@ -92,9 +92,17 @@ describe Sudoku do
         x4xx71xxx
         xx6xxxx5x
         8xxxxxxx3
-      ])
+      ]).grid
     ).to eq(%w[
-        to_do
+        254683197
+        687915342
+        913427568
+        479132685
+        162598734
+        538764219
+        345871926
+        726349851
+        891256473
       ])
   end
 end

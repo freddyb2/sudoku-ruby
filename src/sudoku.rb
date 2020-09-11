@@ -52,8 +52,13 @@ class Grid
     CHARS_AUTHORIZED - chars_in_line(line_index) - chars_in_column(column_index) - chars_in_square(line_index, column_index)
   end
 
+  #TODO smell feature envy
   def cell_indexes
     CELLS_INDEXES
+  end
+
+  def check_chars! chars
+    raise "NOT COMPLETE" unless (CHARS_AUTHORIZED - chars).empty? && chars.count == CHARS_AUTHORIZED.count
   end
 
   def solution_reached?
@@ -78,8 +83,9 @@ class Grid
   def imprime
     CELLS_INDEXES.each do |line_index|
       CELLS_INDEXES.each do |column_index|
-        possibilities = possibilities(line_index, column_index)
-        print("[" + possibilities.map(&:to_s).join + (1..(6 - possibilities.count)).to_a.map { |_| " " }.join + "]")
+        cell = cell(line_index, column_index)
+        content = cell == CHAR_TO_COMPLETE ? possibilities(line_index, column_index) : [cell]
+        print("[" + content.map(&:to_s).join + (1..(9 - content.count)).to_a.map { |_| " " }.join + "]")
         print "   " if ((column_index + 1) % 3 == 0)
       end
       puts
@@ -104,24 +110,46 @@ end
 
 class Sudoku
   def self.solve grid
-    new.solve grid
+    new.solve Grid.from_rows(grid)
   end
 
   def solve grid
-    grid_solved = Grid.from_rows(grid)
+    grid_solved = grid
     begin
       grid_before = grid_solved
       grid_solved = Grid.from_grid(grid_solved)
       solve_lines(grid_solved)
-      exploration = grid_before == grid_solved
-    end until grid_solved.solution_reached? || exploration
-    grid_solved.grid
+    end until grid_before == grid_solved
+    return grid_solved if grid_solved.solution_reached?
+
+    grids_to_explore(grid_solved).each do |grid_to_explore|
+      grid_explored = self.solve grid_to_explore
+      next unless grid_explored
+      return grid_explored if grid_explored.solution_reached?
+    end
+    nil
   end
 
   private
 
-  def check_chars! chars
-    raise "NOT COMPLETE" unless (CHARS_AUTHORIZED - chars).empty? && chars.count == CHARS_AUTHORIZED.count
+  def grids_to_explore(grid)
+    grid.cell_indexes.map do |line_index|
+      grid.cell_indexes.map do |column_index|
+        possibilities = grid.possibilities(line_index, column_index)
+        next unless possibilities
+        possibilities_line = possibilities - grid.possibilities_in_line(line_index, column_index)
+        possibilities_column = possibilities - grid.possibilities_in_column(line_index, column_index)
+        possibilities_square = possibilities - grid.possibilities_in_square(line_index, column_index)
+        cell_solutions = [possibilities, possibilities_line, possibilities_column, possibilities_square]
+                             .flatten
+                             .uniq
+        cell_solutions.map do |cell_solution|
+          grid_to_explore = Grid.from_grid(grid)
+          grid_to_explore.write_cell(line_index, column_index, cell_solution)
+          grid_to_explore
+        end
+      end.flatten
+    end.flatten.compact
   end
 
   def solve_lines(grid)
