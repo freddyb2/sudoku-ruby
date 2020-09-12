@@ -136,7 +136,7 @@ class Sudoku
   end
 
   def grids_to_explore(grid)
-    list_of_list_of_grids = grid.cell_indexes.map do |line_index|
+    grid.cell_indexes.map do |line_index|
       grid.cell_indexes.map do |column_index|
         possibilities = grid.possibilities(line_index, column_index)
         next unless possibilities
@@ -151,8 +151,7 @@ class Sudoku
           grid_to_explore
         end
       end
-    end.flatten(1).select { |l| !l.empty? }
-    list_of_list_of_grids.flatten.compact
+    end.flatten.compact
   end
 
   def solve_lines(grid)
