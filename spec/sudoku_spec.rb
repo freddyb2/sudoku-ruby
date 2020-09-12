@@ -157,4 +157,29 @@ describe Sudoku do
         692514387
       ])
   end
+  it 'solves diabolic grid ' do
+    expect(
+      described_class.solve(%w[
+        xxx3x5xxx
+        x59x6xxxx
+        xxxxx2xxx
+        xxx5x1x27
+        xxxxxxxxx
+        9xxx38x51
+        x81xxxxx9
+        x6xxxxx72
+        7x51xxx38
+      ]).grid
+    ).to eq(%w[
+        124385796
+        859764213
+        376912845
+        638541927
+        512697384
+        947238651
+        281473569
+        463859172
+        795126438
+      ])
+  end
 end
