@@ -110,10 +110,10 @@ end
 
 class Sudoku
   def self.solve grid
-    new.solve(Grid.from_rows(grid), 0)
+    new.solve Grid.from_rows(grid)
   end
 
-  def solve(grid, explore_level)
+  def solve(grid)
     grid_solved = grid
     begin
       grid_before = grid_solved
@@ -121,18 +121,17 @@ class Sudoku
       solve_lines(grid_solved)
     end until grid_before == grid_solved
     return grid_solved if grid_solved.solution_reached?
-    grids_to_explore(grid_solved).each do |grid_to_explore|
-      grid_explored = self.solve(grid_to_explore, explore_level + 1)
-      next unless grid_explored
-      return grid_explored if grid_explored.solution_reached?
-    end
-    nil
+    explore(grid_solved)
   end
 
   private
 
-  def explore_recursively grid
-
+  def explore(grid_solved)
+    grids_to_explore(grid_solved).each do |grid_to_explore|
+      solution = self.solve grid_to_explore
+      return solution if solution
+    end
+    nil
   end
 
   def grids_to_explore(grid)
