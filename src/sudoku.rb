@@ -58,7 +58,7 @@ class Grid
   end
 
   def check_chars! chars
-    raise "NOT COMPLETE" unless (CHARS_AUTHORIZED - chars).empty? && chars.count == CHARS_AUTHORIZED.count
+    raise "NOT COMPLETE" unless chars.sort == CHARS_AUTHORIZED
   end
 
   def solution_reached?
