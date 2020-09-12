@@ -110,10 +110,10 @@ end
 
 class Sudoku
   def self.solve grid
-    new.solve Grid.from_rows(grid)
+    new.solve(Grid.from_rows(grid), 0)
   end
 
-  def solve grid
+  def solve(grid, explore_level)
     grid_solved = grid
     begin
       grid_before = grid_solved
@@ -121,9 +121,8 @@ class Sudoku
       solve_lines(grid_solved)
     end until grid_before == grid_solved
     return grid_solved if grid_solved.solution_reached?
-
     grids_to_explore(grid_solved).each do |grid_to_explore|
-      grid_explored = self.solve grid_to_explore
+      grid_explored = self.solve(grid_to_explore, explore_level + 1)
       next unless grid_explored
       return grid_explored if grid_explored.solution_reached?
     end
@@ -132,24 +131,28 @@ class Sudoku
 
   private
 
+  def explore_recursively grid
+
+  end
+
   def grids_to_explore(grid)
-    grid.cell_indexes.map do |line_index|
+    list_of_list_of_grids = grid.cell_indexes.map do |line_index|
       grid.cell_indexes.map do |column_index|
         possibilities = grid.possibilities(line_index, column_index)
         next unless possibilities
         possibilities_line = possibilities - grid.possibilities_in_line(line_index, column_index)
         possibilities_column = possibilities - grid.possibilities_in_column(line_index, column_index)
         possibilities_square = possibilities - grid.possibilities_in_square(line_index, column_index)
-        cell_solutions = [possibilities, possibilities_line, possibilities_column, possibilities_square]
-                             .flatten
+        cell_solutions = (possibilities + possibilities_line + possibilities_column + possibilities_square)
                              .uniq
         cell_solutions.map do |cell_solution|
           grid_to_explore = Grid.from_grid(grid)
           grid_to_explore.write_cell(line_index, column_index, cell_solution)
           grid_to_explore
         end
-      end.flatten
-    end.flatten.compact
+      end
+    end.flatten(1).select { |l| !l.empty? }
+    list_of_list_of_grids.flatten.compact
   end
 
   def solve_lines(grid)

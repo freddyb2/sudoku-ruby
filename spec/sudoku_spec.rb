@@ -80,7 +80,7 @@ describe Sudoku do
       ])
   end
 
-  it 'solves expert grid' do
+  it 'solves expert grid 1' do
     expect(
       described_class.solve(%w[
         xxxx83x9x
@@ -103,6 +103,58 @@ describe Sudoku do
         345871926
         726349851
         891256473
+      ])
+  end
+
+  it 'solves expert grid 2' do
+    expect(
+      described_class.solve(%w[
+        xx6x1xxxx
+        x2xxx9xxx
+        57xxxxxxx
+        xx126xx48
+        xxxxx3x7x
+        xxxxxxxxx
+        6xxx41x8x
+        xxx3xxxx2
+        x34x9xxx6
+      ]).grid
+    ).to eq(%w[
+        946715823
+        128639754
+        573428169
+        351267948
+        469183275
+        287954631
+        692541387
+        815376492
+        734892516
+      ])
+  end
+
+  it 'solves expert grid 3' do
+    expect(
+      described_class.solve(%w[
+        xxxx3xxxx
+        xx1x7694x
+        x8x9xxxxx
+        x4xxx1xxx
+        x28x9xxxx
+        xxxxxx16x
+        7xx8xxxxx
+        xxxxxx4x2
+        x9xx1x3xx
+      ]).grid
+    ).to eq(%w[
+        469138275
+        351276948
+        287945631
+        946751823
+        128693754
+        573482169
+        734829516
+        815367492
+        692514387
       ])
   end
 end
