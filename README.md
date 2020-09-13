@@ -2,7 +2,7 @@
 
 ## Préambule
 
-Ce projet n'a pour ambition que de faire passer le temps :)g
+Ce projet n'a pour ambition que de faire passer le temps :)
 
 ## Use case
 
