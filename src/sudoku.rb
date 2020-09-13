@@ -139,17 +139,19 @@ class Sudoku
   end
 
   def solve(grid)
-    grid_solved = grid
-    begin
-      grid_before = grid_solved
-      grid_solved = Grid.from_grid(grid_solved)
-      grid_solved.solve_lines
-    end until grid_before == grid_solved
+    grid_solved = solve_with_method(grid)
     return grid_solved if grid_solved.solution_reached?
     explore(grid_solved)
   end
 
   private
+
+  def solve_with_method(grid)
+    grid_solved = Grid.from_grid(grid)
+    grid_solved.solve_lines
+    return grid_solved if grid_solved == grid
+    solve_with_method grid_solved
+  end
 
   def explore(grid)
     grid.grids_to_explore.each do |grid_to_explore|
