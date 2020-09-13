@@ -137,20 +137,13 @@ class Sudoku
   def grids_to_explore(grid)
     grid.cell_indexes.map do |line_index|
       grid.cell_indexes.map do |column_index|
-        possibilities = grid.possibilities(line_index, column_index)
-        next unless possibilities
-        possibilities_line = possibilities - grid.possibilities_in_line(line_index, column_index)
-        possibilities_column = possibilities - grid.possibilities_in_column(line_index, column_index)
-        possibilities_square = possibilities - grid.possibilities_in_square(line_index, column_index)
-        cell_solutions = (possibilities + possibilities_line + possibilities_column + possibilities_square)
-                             .uniq
-        cell_solutions.map do |cell_solution|
+        grid.possibilities(line_index, column_index).map do |cell_solution|
           grid_to_explore = Grid.from_grid(grid)
           grid_to_explore.write_cell(line_index, column_index, cell_solution)
           grid_to_explore
         end
       end
-    end.flatten.compact
+    end.flatten
   end
 
   def solve_lines(grid)
