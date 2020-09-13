@@ -57,16 +57,16 @@ class Sudoku
   end
 
   def solve
-    grid_solved = self.solve_with_method
-    return grid_solved if grid_solved.solution_reached?
-    grid_solved.explore
+    grid = solve_with_method
+    return grid if grid.solution_reached?
+    grid.explore
   end
 
   def solve_with_method
-    grid_solved = Sudoku.from_grid(self)
-    grid_solved.solve_with_method_one_iter
-    return grid_solved if grid_solved == self
-    grid_solved.solve_with_method
+    grid = Sudoku.from_grid(self)
+    grid.solve_with_method_one_iter
+    return grid if grid == self
+    grid.solve_with_method
   end
 
   def solve_with_method_one_iter
@@ -88,7 +88,7 @@ class Sudoku
   end
 
   def explore
-    self.grids_to_explore.each do |grid_to_explore|
+    grids_to_explore.each do |grid_to_explore|
       solution = grid_to_explore.solve
       return solution if solution
     end
