@@ -52,11 +52,6 @@ class Grid
     CHARS_AUTHORIZED - chars_in_line(line_index) - chars_in_column(column_index) - chars_in_square(line_index, column_index)
   end
 
-  #TODO smell feature envy
-  def cell_indexes
-    CELLS_INDEXES
-  end
-
   def solve_lines
     CELLS_INDEXES.each do |line_index|
       CELLS_INDEXES.each do |column_index|
@@ -73,6 +68,18 @@ class Grid
         write_cell(line_index, column_index, cell_solutions.first) if cell_solutions.count == 1
       end
     end
+  end
+
+  def grids_to_explore
+    CELLS_INDEXES.map do |line_index|
+      CELLS_INDEXES.map do |column_index|
+        possibilities(line_index, column_index).map do |cell_solution|
+          grid_to_explore = Grid.from_grid(self)
+          grid_to_explore.write_cell(line_index, column_index, cell_solution)
+          grid_to_explore
+        end
+      end
+    end.flatten
   end
 
   def check_chars! chars
@@ -144,24 +151,11 @@ class Sudoku
 
   private
 
-  def explore(grid_solved)
-    grids_to_explore(grid_solved).each do |grid_to_explore|
+  def explore(grid)
+    grid.grids_to_explore.each do |grid_to_explore|
       solution = self.solve grid_to_explore
       return solution if solution
     end
     nil
   end
-
-  def grids_to_explore(grid)
-    grid.cell_indexes.map do |line_index|
-      grid.cell_indexes.map do |column_index|
-        grid.possibilities(line_index, column_index).map do |cell_solution|
-          grid_to_explore = Grid.from_grid(grid)
-          grid_to_explore.write_cell(line_index, column_index, cell_solution)
-          grid_to_explore
-        end
-      end
-    end.flatten
-  end
-
 end
