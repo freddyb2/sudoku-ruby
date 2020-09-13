@@ -4,7 +4,7 @@ require 'sudoku'
 describe Sudoku do
   it 'solves easy grids' do
     expect(
-      described_class.solve(%w[
+      described_class.from_rows( %w[
         75893xxx1
         xx1xx5xx4
         xx621x3xx
@@ -14,7 +14,7 @@ describe Sudoku do
         16xxx8x92
         xxxx7xx3x
         4xxx96x5x
-      ]).grid
+      ]).solve.grid
     ).to eq(%w[
         758934261
         231865974
@@ -30,7 +30,7 @@ describe Sudoku do
 
   it 'solves more difficult grids' do
     expect(
-      described_class.solve(%w[
+      described_class.from_rows(%w[
         x79xx1xx3
         xx8x7xxx1
         xx2x34xx5
@@ -40,7 +40,7 @@ describe Sudoku do
         x2x1x7xxx
         x1x64853x
         85x2xxx6x
-      ]).grid
+      ]).solve.grid
     ).to eq(%w[
         579861423
         348572691
@@ -56,7 +56,7 @@ describe Sudoku do
 
   it 'solves difficult grid' do
     expect(
-      described_class.solve(%w[
+      described_class.from_rows(%w[
         x19xxx2xx
         xxx65xxxx
         xxxxx7135
@@ -66,7 +66,7 @@ describe Sudoku do
         1xxxx8xxx
         4x2xx3xxx
         xxxxxx589
-      ]).grid
+      ]).solve.grid
     ).to eq(%w[
         519834276
         327651498
@@ -82,7 +82,7 @@ describe Sudoku do
 
   it 'solves expert grid 1' do
     expect(
-      described_class.solve(%w[
+      described_class.from_rows(%w[
         xxxx83x9x
         6x7xxx3xx
         x1xxxxxxx
@@ -92,7 +92,7 @@ describe Sudoku do
         x4xx71xxx
         xx6xxxx5x
         8xxxxxxx3
-      ]).grid
+      ]).solve.grid
     ).to eq(%w[
         254683197
         687915342
@@ -108,7 +108,7 @@ describe Sudoku do
 
   it 'solves expert grid 2' do
     expect(
-      described_class.solve(%w[
+      described_class.from_rows(%w[
         xx6x1xxxx
         x2xxx9xxx
         57xxxxxxx
@@ -118,7 +118,7 @@ describe Sudoku do
         6xxx41x8x
         xxx3xxxx2
         x34x9xxx6
-      ]).grid
+      ]).solve.grid
     ).to eq(%w[
         946715823
         128639754
@@ -134,7 +134,7 @@ describe Sudoku do
 
   it 'solves expert grid 3' do
     expect(
-      described_class.solve(%w[
+      described_class.from_rows( %w[
         xxxx3xxxx
         xx1x7694x
         x8x9xxxxx
@@ -144,7 +144,7 @@ describe Sudoku do
         7xx8xxxxx
         xxxxxx4x2
         x9xx1x3xx
-      ]).grid
+      ]).solve.grid
     ).to eq(%w[
         469138275
         351276948
@@ -159,7 +159,7 @@ describe Sudoku do
   end
   it 'solves diabolic grid ' do
     expect(
-      described_class.solve(%w[
+      described_class.from_rows(%w[
         xxx3x5xxx
         x59x6xxxx
         xxxxx2xxx
@@ -169,7 +169,7 @@ describe Sudoku do
         x81xxxxx9
         x6xxxxx72
         7x51xxx38
-      ]).grid
+      ]).solve.grid
     ).to eq(%w[
         124385796
         859764213
