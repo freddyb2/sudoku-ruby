@@ -57,6 +57,24 @@ class Grid
     CELLS_INDEXES
   end
 
+  def solve_lines
+    CELLS_INDEXES.each do |line_index|
+      CELLS_INDEXES.each do |column_index|
+        possibilities = possibilities(line_index, column_index)
+        next unless possibilities
+        possibilities_line = possibilities - possibilities_in_line(line_index, column_index)
+        possibilities_column = possibilities - possibilities_in_column(line_index, column_index)
+        possibilities_square = possibilities - possibilities_in_square(line_index, column_index)
+        cell_solutions = [possibilities, possibilities_line, possibilities_column, possibilities_square]
+                             .select { |p| p.count == 1 }
+                             .flatten
+                             .uniq
+
+        write_cell(line_index, column_index, cell_solutions.first) if cell_solutions.count == 1
+      end
+    end
+  end
+
   def check_chars! chars
     raise "NOT COMPLETE" unless chars.sort == CHARS_AUTHORIZED
   end
@@ -118,7 +136,7 @@ class Sudoku
     begin
       grid_before = grid_solved
       grid_solved = Grid.from_grid(grid_solved)
-      solve_lines(grid_solved)
+      grid_solved.solve_lines
     end until grid_before == grid_solved
     return grid_solved if grid_solved.solution_reached?
     explore(grid_solved)
@@ -146,21 +164,4 @@ class Sudoku
     end.flatten
   end
 
-  def solve_lines(grid)
-    grid.cell_indexes.each do |line_index|
-      grid.cell_indexes.each do |column_index|
-        possibilities = grid.possibilities(line_index, column_index)
-        next unless possibilities
-        possibilities_line = possibilities - grid.possibilities_in_line(line_index, column_index)
-        possibilities_column = possibilities - grid.possibilities_in_column(line_index, column_index)
-        possibilities_square = possibilities - grid.possibilities_in_square(line_index, column_index)
-        cell_solutions = [possibilities, possibilities_line, possibilities_column, possibilities_square]
-                             .select { |p| p.count == 1 }
-                             .flatten
-                             .uniq
-
-        grid.write_cell(line_index, column_index, cell_solutions.first) if cell_solutions.count == 1
-      end
-    end
-  end
 end
