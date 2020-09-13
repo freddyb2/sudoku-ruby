@@ -52,7 +52,24 @@ class Sudoku
     CHARS_AUTHORIZED - chars_in_line(line_index) - chars_in_column(column_index) - chars_in_square(line_index, column_index)
   end
 
-  def solve_lines
+  def check_chars! chars
+    raise "NOT COMPLETE" unless chars.sort == CHARS_AUTHORIZED
+  end
+
+  def solve
+    grid_solved = self.solve_with_method
+    return grid_solved if grid_solved.solution_reached?
+    grid_solved.explore
+  end
+
+  def solve_with_method
+    grid_solved = Sudoku.from_grid(self)
+    grid_solved.solve_with_method_one_iter
+    return grid_solved if grid_solved == self
+    grid_solved.solve_with_method
+  end
+
+  def solve_with_method_one_iter
     CELLS_INDEXES.each do |line_index|
       CELLS_INDEXES.each do |column_index|
         possibilities = possibilities(line_index, column_index)
@@ -70,6 +87,14 @@ class Sudoku
     end
   end
 
+  def explore
+    self.grids_to_explore.each do |grid_to_explore|
+      solution = grid_to_explore.solve
+      return solution if solution
+    end
+    nil
+  end
+
   def grids_to_explore
     CELLS_INDEXES.map do |line_index|
       CELLS_INDEXES.map do |column_index|
@@ -80,31 +105,6 @@ class Sudoku
         end
       end
     end.flatten
-  end
-
-  def check_chars! chars
-    raise "NOT COMPLETE" unless chars.sort == CHARS_AUTHORIZED
-  end
-
-  def solve_with_method
-    grid_solved = Sudoku.from_grid(self)
-    grid_solved.solve_lines
-    return grid_solved if grid_solved == self
-    grid_solved.solve_with_method
-  end
-
-  def solve
-    grid_solved = self.solve_with_method
-    return grid_solved if grid_solved.solution_reached?
-    grid_solved.explore
-  end
-
-  def explore
-    self.grids_to_explore.each do |grid_to_explore|
-      solution = grid_to_explore.solve
-      return solution if solution
-    end
-    nil
   end
 
   def solution_reached?
